@@ -1,0 +1,71 @@
+# Generated Data
+data/*.jsonl
+data/ml_results.json
+data/zeek/*.log
+data/zeek/*.json
+data/suricata/eve.json
+data/suricata/*.json
+data/suricata/stats.log
+
+# Reports (commit generated PNG plots, but not temp files)
+reports/*.tmp
+reports/*.temp
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and Artifacts
+*.log
+*.pcap
+*.pcapng
+*.cap
+
+# Docker
+.docker/
+.dockerignore
+
+# Temporary
+*.tmp
+*.temp
+.tmp/

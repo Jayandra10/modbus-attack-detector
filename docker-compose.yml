@@ -1,0 +1,78 @@
+name: modbus-attack-detector
+
+services:
+  modbus-server:
+    build: ./modbus-server
+    container_name: modbus-server
+    expose:
+      - "5020"
+    networks:
+      - ot-net
+    volumes:
+      - ./data:/data
+
+  traffic-gen:
+    build: ./traffic-gen
+    container_name: traffic-gen
+    depends_on:
+      - modbus-server
+    networks:
+      - ot-net
+    volumes:
+      - ./data:/data
+    environment:
+      - MODBUS_HOST=modbus-server
+      - MODBUS_PORT=5020
+
+  zeek:
+    image: zeek/zeek:latest
+    container_name: zeek
+    depends_on:
+      - modbus-server
+    network_mode: "service:modbus-server"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    volumes:
+      - ./zeek/local.zeek:/usr/local/zeek/share/zeek/site/local.zeek:ro
+      - ./data/zeek:/logs
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - "mkdir -p /logs && /usr/local/zeek/bin/zeek -i eth0 LogAscii::use_json=T 'Log::default_logdir=/logs' 'ignore_checksums=T' local.zeek"
+
+  suricata:
+    image: jasonish/suricata:latest
+    container_name: suricata
+    depends_on:
+      - modbus-server
+    network_mode: "service:modbus-server"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    volumes:
+      - ./suricata/custom.rules:/etc/suricata/rules/custom.rules:ro
+      - ./data/suricata:/var/log/suricata
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - "mkdir -p /var/log/suricata && suricata -c /etc/suricata/suricata.yaml -i eth0 -l /var/log/suricata -S /etc/suricata/rules/custom.rules"
+
+  ml:
+    build: ./ml
+    container_name: ml
+    volumes:
+      - ./data:/data
+
+  viz:
+    build: ./viz
+    container_name: viz
+    volumes:
+      - ./data:/data:ro
+      - ./reports:/reports
+    depends_on:
+      - modbus-server
+
+networks:
+  ot-net:
+    driver: bridge

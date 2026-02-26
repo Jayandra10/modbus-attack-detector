@@ -1,0 +1,12 @@
+# Suricata custom rules for Phase 1 Modbus attack detection
+# Detects write-style activity, scanning behavior, and suspicious access patterns
+
+# Rule 1: Detect Modbus TCP connections (any traffic to port 5020)
+alert tcp any any -> any 5020 (msg:"MODBUS TCP Connection"; sid:1001; rev:1;)
+
+# Rule 2: Detect multiple rapid TCP connections (scanning/recon behavior)
+alert tcp any any -> any 5020 (msg:"MODBUS Rapid Connections"; flow:to_server; threshold:type both,track by_src,count 5,seconds 10; sid:1002; rev:1;)
+
+# Rule 3: Generic network activity detection on Modbus port
+alert tcp any any -> any 5020 (msg:"MODBUS Network Activity Detected"; content:"test"; sid:1003; rev:1; noalert;)
+
