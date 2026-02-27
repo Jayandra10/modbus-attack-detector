@@ -48,7 +48,7 @@ Build a Dockerized OT testbed for **Modbus/TCP** to detect **recon** and **manip
 ### Architecture diagram
 - `reports/framework.png`
 
-## Real ICS Application Scenario (Physical Meaning)
+## Real ICS Application Scenario
 To make the experiment realistic, we map Modbus memory to a **water treatment pump station**.
 
 ### Modbus memory map (example)
