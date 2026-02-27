@@ -46,7 +46,6 @@ Build a Dockerized OT testbed for **Modbus/TCP** to detect **recon** and **manip
 4. **ML** reads labels + traffic events (+ optional Suricata alerts) → trains classifier → `data/ml_results.json`
 
 ### Architecture diagram
-Add your draw.io export here:
 - `reports/framework.png`
 
 ## Real ICS Application Scenario (Physical Meaning)
